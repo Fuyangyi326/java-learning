@@ -5,9 +5,11 @@ public class StudentDemo {
 
         Student s2 = new Student("李四",20,92);
         s2.introduce();
-        s1.age=99;
-        System.out.println("s1 年龄改成：" + s1.age);
-        System.out.println("s2 年龄：" + s2.age);
+
+        s1.setAge(99);
+        System.out.println("s1 年龄：" + s1.getAge());
+        s2.setAge(-5);
+        System.out.println("s2 年龄：" + s2.getAge());
     }
 }
 
