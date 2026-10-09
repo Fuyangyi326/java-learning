@@ -87,6 +87,14 @@ public class StudentManageSystem {
     }
 
     static void deleteStudent() {
-        // TODO
+       System.out.print("请输入要删除的学号：");
+       String id=scanner.nextLine();
+
+       if(!students.containsKey(id)) {
+           System.out.println("未找到该学生");
+           return;
+       }
+        students.remove(id);
+        System.out.println("删除成功！");
     }
 }
