@@ -39,7 +39,26 @@ public class StudentManageSystem {
     }
 
     static void addStudent() {
+     System.out.print("请输入学号：");
+     String id=scanner.nextLine();
 
+     if (students.containsKey(id)) {
+         System.out.println("学号已存在！");
+            return;
+        }
+     System.out.print("请输入姓名：");
+     String name=scanner.nextLine();
+
+     System.out.print("请输入年龄：");
+     int age=scanner.nextInt();
+     scanner.nextLine();
+
+     System.out.print("请输入成绩:");
+     int score=scanner.nextInt();
+     scanner.nextLine();
+
+     students.put(id, new Student(id, name, age, score));
+     System.out.print("添加成功");
     }
 
     static void showAllStudents() {
@@ -51,6 +70,6 @@ public class StudentManageSystem {
     }
 
     static void deleteStudent() {
-        
+
     }
 }
