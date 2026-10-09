@@ -75,7 +75,15 @@ public class StudentManageSystem {
     }
 
     static void findStudent() {
-        // TODO
+        System.out.print("请输入要查找的学号：");
+        String id = scanner.nextLine();
+
+        if (!students.containsKey(id)) {
+            System.out.println("未找到该学生");
+            return;
+        }
+
+        students.get(id).introduce();
     }
 
     static void deleteStudent() {
