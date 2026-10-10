@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -6,6 +7,7 @@ public class StudentManageSystem {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        loadStudents();
         while (true) {
             printMenu();
             int choice = scanner.nextInt();
@@ -20,6 +22,7 @@ public class StudentManageSystem {
             } else if (choice == 4) {
                 deleteStudent();
             } else if (choice == 5) {
+                saveStudents();
                 System.out.println("再见！");
                 break;
             } else {
@@ -97,4 +100,36 @@ public class StudentManageSystem {
         students.remove(id);
         System.out.println("删除成功！");
     }
-}
+    static void loadStudents() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("students.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length != 4) continue;
+                String id = parts[0];
+                String name = parts[1];
+                int age = Integer.parseInt(parts[2]);
+                int score = Integer.parseInt(parts[3]);
+
+                students.put(id, new Student(id, name, age, score));
+            }
+            reader.close();
+        } catch (IOException e) { System.out.println("加载失败：" + e.getMessage());
+        }
+    }
+    static void saveStudents() {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter("students.txt"));
+            for (String id : students.keySet()) {
+                Student s = students.get(id);
+                writer.write(s.getId() + "," + s.getName() + "," + s.getAge() + "," + s.getScore());
+                writer.newLine();
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("保存失败：" + e.getMessage());
+        }
+     }
+    }
+
