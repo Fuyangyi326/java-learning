@@ -17,7 +17,9 @@
 - [ ] 文件 IO
 - [ ] 多线程
 - [ ] MySQL
-- [ ] Spring Boot## 项目
+- [ ] Spring Boot
+
+## 项目
 
 ### 学生管理系统
 
