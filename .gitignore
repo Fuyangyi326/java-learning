@@ -15,4 +15,7 @@ Thumbs.db
 # 日志
 *.log
 
+# 运行时生成的数据文件
+students.txt
 test.txt
+students.txt
