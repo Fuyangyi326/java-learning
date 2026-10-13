@@ -1,13 +1,12 @@
 import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
-
+import java.util.List;
 public class StudentManageSystem {
-    static HashMap<String, Student> students = new HashMap<>();
+    static StudentDao dao = new StudentDao();
     static Scanner scanner = new Scanner(System.in);
 
-    public static void main(String[] args) {
-        loadStudents();
+    public static void main(String[] args) throws Exception {
         while (true) {
             printMenu();
             int choice = scanner.nextInt();
@@ -22,7 +21,6 @@ public class StudentManageSystem {
             } else if (choice == 4) {
                 deleteStudent();
             } else if (choice == 5) {
-                saveStudents();
                 System.out.println("再见！");
                 break;
             } else {
@@ -30,7 +28,6 @@ public class StudentManageSystem {
             }
         }
     }
-
     static void printMenu() {
         System.out.println("\n===== 学生管理系统 =====");
         System.out.println("1. 添加学生");
@@ -41,11 +38,11 @@ public class StudentManageSystem {
         System.out.print("请选择：");
     }
 
-    static void addStudent() {
+    static void addStudent() throws Exception {
         System.out.print("请输入学号：");
         String id = scanner.nextLine();
 
-        if (students.containsKey(id)) {
+        if (dao.existsById(id)) {
             System.out.println("学号已存在！");
             return;
         }
@@ -61,75 +58,47 @@ public class StudentManageSystem {
         int score = scanner.nextInt();
         scanner.nextLine();
 
-        students.put(id, new Student(id, name, age, score));
+        dao.add(new Student(id, name, age, score));
         System.out.println("添加成功！");
     }
 
-    static void showAllStudents() {
-        if (students.isEmpty()) {
+    static void showAllStudents() throws Exception{
+        List<Student> list = dao.findAll();
+        if (list.isEmpty()) {
             System.out.println("暂无学生");
             return;
         }
 
         System.out.println("\n===== 所有学生 =====");
-        for (String id : students.keySet()) {
-            students.get(id).introduce();
+        for (Student s : list) {
+            s.introduce();
         }
     }
 
-    static void findStudent() {
+    static void findStudent() throws Exception {
         System.out.print("请输入要查找的学号：");
         String id = scanner.nextLine();
 
-        if (!students.containsKey(id)) {
+        Student s = dao.findById(id);
+        if (s == null){
             System.out.println("未找到该学生");
             return;
         }
 
-        students.get(id).introduce();
+        s.introduce();
     }
 
-    static void deleteStudent() {
+    static void deleteStudent() throws Exception {
        System.out.print("请输入要删除的学号：");
        String id=scanner.nextLine();
 
-       if(!students.containsKey(id)) {
+       if(!dao.existsById(id)) {
            System.out.println("未找到该学生");
            return;
        }
-        students.remove(id);
+        dao.deleteById(id);
         System.out.println("删除成功！");
-    }
-    static void loadStudents() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("students.txt"));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length != 4) continue;
-                String id = parts[0];
-                String name = parts[1];
-                int age = Integer.parseInt(parts[2]);
-                int score = Integer.parseInt(parts[3]);
-
-                students.put(id, new Student(id, name, age, score));
-            }
-            reader.close();
-        } catch (IOException e) { System.out.println("加载失败：" + e.getMessage());
-        }
-    }
-    static void saveStudents() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("students.txt"));
-            for (String id : students.keySet()) {
-                Student s = students.get(id);
-                writer.write(s.getId() + "," + s.getName() + "," + s.getAge() + "," + s.getScore());
-                writer.newLine();
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("保存失败：" + e.getMessage());
-        }
      }
+
     }
 
